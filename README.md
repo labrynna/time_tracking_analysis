@@ -28,9 +28,29 @@ Ideal for professionals aiming to align daily work with personal or team goals, 
 | `daily_data.py`  | Loads and prepares structured time tracking data          |
 | `daily_anomalies.py` | Detects daily anomalies and triggers feedback based on deviations |
 
-## Sample Snippet: Anomaly Detection Logic
+# 📂 Code Snippets
+This project includes two real, production-grade code snippets demonstrating intelligent automation and data analysis for time tracking:
 
-```python
-# From daily_anomalies.py
-if score > 0.6:
-    anomalies.append((project, duration, score))
+## 1. 📄 load_data() — Intelligent Time Parsing and Cleanup
+Robustly loads and cleans raw CSV data, merging date and time columns into unified timestamps, handling encoding issues, and converting duration to a standardized format. It ensures data integrity for further analysis.
+
+Key capabilities:
+
+Mixed format handling
+
+Null and error-tolerant datetime conversion
+
+Flexible integration with various time-tracking tools
+
+## 2. 📄 analyze_changes() — Time-Series Comparison with Anomaly Detection
+This function uses Isolation Forest to detect anomalies by comparing a day’s activities to historical patterns. It quantifies shifts in time allocation and flags significant deviations for further inspection.
+
+Key features:
+
+Intelligent grouping and normalization
+
+Scikit-learn-based unsupervised anomaly detection
+
+Clear output of significant behavioral shifts
+
+Both snippets reflect real-world challenges in time-tracking automation, with a strong emphasis on data quality, interpretability, and ML-driven insights.
