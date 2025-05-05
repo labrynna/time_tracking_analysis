@@ -1,0 +1,25 @@
+def analyze_changes(yesterday_data, previous_data, group_by_column):
+    yesterday_distribution = yesterday_data.groupby(group_by_column)['Duration'].sum()
+    previous_distribution = previous_data.groupby(group_by_column)['Duration'].sum() / no_of_days
+
+    distribution_data = pd.DataFrame({
+        'yesterday': yesterday_distribution,
+        'previous': previous_distribution
+    }).fillna(0)
+
+    distribution_data['deviation (%)'] = (
+        (distribution_data['yesterday'] - distribution_data['previous']) /
+        distribution_data['previous'].replace(0, np.nan)
+    ) * 100
+    distribution_data['deviation (%)'].fillna(100, inplace=True)
+
+    model = IsolationForest(contamination=0.15, random_state=42)
+    distribution_data['anomaly'] = model.fit_predict(distribution_data[['yesterday', 'previous']])
+
+    significant_changes = distribution_data[distribution_data['anomaly'] == -1].copy()
+    significant_changes.drop(columns=['anomaly'], inplace=True)
+    significant_changes.sort_values(by='deviation (%)', ascending=False, inplace=True)
+    significant_changes.drop(columns=['deviation (%)'], inplace=True)
+    significant_changes = significant_changes.round(1)
+
+    return significant_changes
