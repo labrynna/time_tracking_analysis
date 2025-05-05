@@ -1,0 +1,22 @@
+def load_data(file_path):
+    try:
+        df = pd.read_csv(file_path, encoding='ISO-8859-1')
+        
+        if 'Start date' in df.columns and 'Start time' in df.columns:
+            df['start'] = pd.to_datetime(
+                df['Start date'] + ' ' + df['Start time'], format='mixed', errors='coerce'
+            )
+        
+        if 'End date' in df.columns and 'End time' in df.columns:
+            df['end'] = pd.to_datetime(
+                df['End date'] + ' ' + df['End time'], format='mixed', errors='coerce'
+            )
+        
+        if 'Duration' in df.columns:
+            df['Duration'] = df['Duration'].apply(lambda x: x if isinstance(x, (int, float)) else float(x) / 3600)
+        
+        df = df.dropna(subset=['start', 'end'])
+        return df
+    except Exception as e:
+        print(f"Error reading the CSV file: {e}")
+        return None
